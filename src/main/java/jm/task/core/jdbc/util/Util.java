@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class Util implements AutoCloseable {
+public class Util  {
     private static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";
     private static final String DB_URL = "jdbc:mysql://localhost:3306/test_schema";
     private static final String DB_USERNAME = "root";
@@ -21,7 +21,8 @@ public class Util implements AutoCloseable {
         return connection;
     }
 
-    @Override
-    public void close() throws Exception {
+
+    public static void close(){
+        System.out.println("Соединение закрыто.");
     }
 }

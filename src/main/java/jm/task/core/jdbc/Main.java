@@ -2,10 +2,10 @@ package jm.task.core.jdbc;
 
 import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
-import jm.task.core.jdbc.util.Util;
+
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         UserService userService = new UserServiceImpl();
 
         userService.createUsersTable();
@@ -15,14 +15,18 @@ public class Main {
         userService.saveUser("Artem", "Masha", (byte)11);
         userService.saveUser("Vlad", "Svetlana", (byte)72);
 
-        System.out.println("До очистки:" + "\n");
+        System.out.println("До очистки по ID:" + "\n");
+        userService.getAllUsers();
+
+        userService.removeUserById(4);
+        userService.removeUserById(1);
+
+        System.out.println("До полной очистки:" + "\n");
         userService.getAllUsers();
 
         userService.cleanUsersTable();
-        System.out.println("После очистки:" + "\n");
+        System.out.println("После полной очистки:" + "\n");
 
         userService.dropUsersTable();
-
-        Util.close();
     }
 }

@@ -1,6 +1,7 @@
 package jm.task.core.jdbc.util;
 
 import jm.task.core.jdbc.model.User;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -18,15 +19,17 @@ public class Util  {
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "232113";
 
+    private static Connection connection;
     private static SessionFactory sessionFactory;
 
     public static Connection getConnection(){
-        Connection connection = null;
-        try {
-            Class.forName(DB_DRIVER);
-            connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+        if(connection == null) {
+            try {
+                Class.forName(DB_DRIVER);
+                connection = DriverManager.getConnection(DB_URL, DB_USERNAME, DB_PASSWORD);
+            } catch (ClassNotFoundException | SQLException e) {
+                e.printStackTrace();
+            }
         }
         return connection;
     }
@@ -69,5 +72,24 @@ public class Util  {
 
         configuration.setProperties(settings);
         return configuration;
+    }
+
+    public static void closeBD(){
+        if (connection != null){
+            try{
+                connection.close();
+                System.out.println("Connection закрыт.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if(sessionFactory != null){
+            try{
+                sessionFactory.close();
+                System.out.println("SessionFactory закрыт.");
+            } catch (HibernateException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
